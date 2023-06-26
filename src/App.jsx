@@ -1,34 +1,34 @@
-import "./App.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import React, { Component } from "react";
-import axios from "axios";
+import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import React, { Component } from 'react';
+// import axios from "axios";
 
-import ImageError from "components/ImageError/ImageError";
-import Notification from "components/Notification/Notification";
-import API from "components/api/api";
-import ButtonLoadMore from "components/ButtonLoadMore/ButtonLoadMore";
-import ImageGalleryList from "components/ImageGalleryList/ImageGalleryList";
-import SearchBar from "components/SearchBar/SearchBar";
+import ImageError from 'components/ImageError/ImageError';
+import Notification from 'components/Notification/Notification';
+import API from 'components/api/api';
+import ButtonLoadMore from 'components/ButtonLoadMore/ButtonLoadMore';
+import ImageGalleryList from 'components/ImageGalleryList/ImageGalleryList';
+import SearchBar from 'components/SearchBar/SearchBar';
 
 export default class App extends Component {
   state = {
-    inputValue: "",
+    inputValue: '',
     page: 1,
     images: [],
     error: null,
-    status: "idle",
+    status: 'idle',
     isLoading: true,
     loadBtnIsShown: false,
     totalResalts: [],
   };
 
-  handleFormSubmit = (inputValue) => {
+  handleFormSubmit = inputValue => {
     this.setState({ inputValue, images: [], page: 1 });
   };
 
   loadMore = () => {
-    this.setState((prevState) => ({
+    this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   };
@@ -38,7 +38,7 @@ export default class App extends Component {
     const newName = this.state.inputValue;
     const prevPage = prevState.page;
     const nextPage = this.state.page;
-    const totalImages = this.state.totalResalts;
+    // const totalImages = this.state.totalResalts;
 
     if (prevPage !== nextPage || prevName !== newName) {
       this.setState({ isLoading: true, loadBtnIsShown: false });
@@ -49,11 +49,11 @@ export default class App extends Component {
         const remainingPages = this.getRemainingPages(images.totalHits);
         if (remainingPages > 0) this.setState({ loadBtnIsShown: true });
 
-        if (images.hits.length === 0) return this.setState({ status: "empty" });
+        if (images.hits.length === 0) return this.setState({ status: 'empty' });
 
-        this.setState((prevState) => ({
+        this.setState(prevState => ({
           images: [...prevState.images, ...images.hits],
-          status: "resolved",
+          status: 'resolved',
           totalResalts: images.totalHits,
         }));
       } catch (error) {
@@ -62,7 +62,7 @@ export default class App extends Component {
     }
   }
 
-  getRemainingPages = (totalImages) => {
+  getRemainingPages = totalImages => {
     return Math.ceil(totalImages / API.perPage) - this.state.page;
   };
 
@@ -79,19 +79,19 @@ export default class App extends Component {
           theme="colored"
         />
 
-        {status === "empty" && (
+        {status === 'empty' && (
           <Notification
             notification={
-              "There are no images found for your request. Please try again"
+              'There are no images found for your request. Please try again'
             }
           />
         )}
 
-        {status === "idle" && <h1>Please, enter your request</h1>}
+        {status === 'idle' && <h1>Please, enter your request</h1>}
 
-        {status === "rejected" && <ImageError message={error.message} />}
+        {status === 'rejected' && <ImageError message={error.message} />}
 
-        {status === "resolved" && (
+        {status === 'resolved' && (
           <ImageGalleryList images={images} isLoading={isLoading} />
         )}
         {loadBtnIsShown && <ButtonLoadMore onClick={this.loadMore} />}
